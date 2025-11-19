@@ -1,7 +1,7 @@
 # Makefile
 
 # Variables
-IMAGE_NAME = ghcr.io/juangubio/juanpi
+IMAGE_NAME = juanpi38818/juan-gubio
 STACK_NAME = backend
 
 # Construir la imagen Docker
