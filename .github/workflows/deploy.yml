@@ -1,0 +1,55 @@
+# .github/workflows/deploy.yml
+
+name: CI/CD con GitHub Actions y Docker Swarm
+
+on:
+  push:
+    branches:
+      - main  # Ejecutar cuando se haga push a la rama 'main'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Paso 1: Checkout del código fuente
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    # Paso 2: Construir y subir la imagen Docker a GitHub Container Registry (GHCR)
+    - name: Build and push Docker image to GHCR
+      run: |
+        docker build -t ghcr.io/JuanGubio/juanpi:1.0.0 .
+        echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u JuanGubio --password-stdin
+        docker push ghcr.io/JuanGubio/juanpi:1.0.0
+
+    # Paso 3: Despliegue en el VPS usando SSH
+    - name: Deploy to VPS using SSH
+      uses: appleboy/ssh-action@v1
+      with:
+        host: ${{ secrets.VPS_HOST }}  # La IP de tu VPS
+        username: ${{ secrets.VPS_USER }}  # El usuario SSH (en tu caso es '1750211870')
+        password: ${{ secrets.VPS_PASSWORD }}  # Contraseña SSH
+        port: 1987  # Puerto SSH (1987 en tu caso)
+        script: |
+          # Iniciar sesión en el VPS
+          cd ~/deploy
+
+          # Login a GitHub Container Registry
+          echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u JuanGubio --password-stdin
+
+          # Descargar la última imagen
+          docker pull ghcr.io/JuanGubio/juanpi:1.0.0
+
+          # Eliminar el stack anterior (si existe)
+          docker stack rm backend || true
+
+          # Esperar para liberar recursos
+          sleep 10
+
+          # Desplegar el nuevo stack
+          docker stack deploy --with-registry-auth -c ~/deploy/stack.yml backend
+
+          # Ver el estado del servicio y el stack
+          docker service ls
+          docker stack ps backend
