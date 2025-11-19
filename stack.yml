@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   backend:
-    image: ghcr.io/JuanGubio/juanpi:1.0.0
+    image: ghcr.io/juangubio/juanpi:1.0.0
     environment:
       - SPRING_PROFILES_ACTIVE=prod
     ports:
