@@ -1,17 +1,8 @@
-# Makefile
-
-# Variables
-IMAGE_NAME = juanpi38818/juan-gubio
-STACK_NAME = backend
-
-# Construir la imagen Docker
 build:
-    docker build -t $(IMAGE_NAME) .
+	docker build -t ghcr.io/juangubio/juanpi:1.0.1 .
 
-# Subir la imagen a GitHub Container Registry (GHCR)
-push: build
-    docker push $(IMAGE_NAME)
+deploy:
+	docker stack deploy --with-registry-auth -c stack.yml backend
 
-# Desplegar el stack en Docker Swarm
-deploy: push
-    docker stack deploy --with-registry-auth -c stack.yml $(STACK_NAME)
+rm:
+	docker stack rm backend
