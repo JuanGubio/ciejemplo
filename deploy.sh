@@ -2,7 +2,7 @@
 
 USER="juangubio"
 REGISTRY="ghcr.io"
-IMAGE_NAME="juanpi"
+IMAGE_NAME="juanpo"
 TAG="1.0.1"
 FULL_IMAGE="$REGISTRY/$USER/$IMAGE_NAME:$TAG"
 

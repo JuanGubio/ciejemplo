@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   backend:
-    image: ghcr.io/juangubio/juanpi:1.0.1
+    image: ghcr.io/juangubio/juanpo:1.0.1
     deploy:
       replicas: 1
       labels:

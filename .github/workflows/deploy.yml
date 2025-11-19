@@ -19,9 +19,9 @@ jobs:
     # Paso 2: Construir y subir la imagen Docker a GitHub Container Registry (GHCR)
     - name: Build and push Docker image to GHCR
       run: |
-        docker build -t ghcr.io/juangubio/juanpi:1.0.1 .
+        docker build -t ghcr.io/juangubio/juanpo:1.0.1 .
         echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u juangubio --password-stdin
-        docker push ghcr.io/juangubio/juanpi:1.0.1
+        docker push ghcr.io/juangubio/juanpo:1.0.1
 
     # Paso 3: Despliegue en el VPS usando SSH
     - name: Deploy to VPS using SSH
@@ -39,7 +39,7 @@ jobs:
           echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u juangubio --password-stdin
 
           # Descargar la última imagen
-          docker pull ghcr.io/juangubio/juanpi:1.0.1
+          docker pull ghcr.io/juangubio/juanpo:1.0.1
 
           # Eliminar el stack anterior (si existe)
           docker stack rm backend || true
